@@ -1,98 +1,129 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Link } from "expo-router";
+import { useState } from "react";
+import {
+  FlatList,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
-
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
-  return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
-  );
+interface Juego {
+  id: string;
+  nombre: string;
+  horasHoy: number;
+  horasTotales: number;
 }
 
 export default function HomeScreen() {
+  const [juegos] = useState<Juego[]>([
+    {
+      id: "1",
+      nombre: "Zelda: Tears of the Kingdom",
+      horasHoy: 2.5,
+      horasTotales: 45,
+    },
+    { id: "2", nombre: "Valorant", horasHoy: 1.0, horasTotales: 120 },
+    { id: "3", nombre: "Elden Ring", horasHoy: 0, horasTotales: 85 },
+  ]);
+
+  const totalHorasHoy = juegos.reduce((acc, juego) => acc + juego.horasHoy, 0);
+
   return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="dark-content" />
 
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
+      <View style={styles.header}>
+        <Text style={styles.title}>Game Tracker 🎮</Text>
+        <View style={styles.cardResumen}>
+          <Text style={styles.resumenTexto}>Horas jugadas hoy:</Text>
+          <Text style={styles.resumenHoras}>{totalHorasHoy} hrs</Text>
+        </View>
+      </View>
 
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
-          />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
+      <Text style={styles.subtitle}>Mis Videojuegos</Text>
+      <FlatList
+        data={juegos}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <View style={styles.juegoCard}>
+            <View>
+              <Text style={styles.juegoNombre}>{item.nombre}</Text>
+              <Text style={styles.juegoDetalle}>
+                Total: {item.horasTotales} hrs acumuladas
+              </Text>
+            </View>
+            <View style={styles.badgeHoras}>
+              <Text style={styles.badgeTexto}>+{item.horasHoy}h hoy</Text>
+            </View>
+          </View>
+        )}
+      />
 
-        {Platform.OS === 'web' && <WebBadge />}
-      </SafeAreaView>
-    </ThemedView>
+      <Link href="/modal" asChild>
+        <TouchableOpacity style={styles.botonAgregar}>
+          <Text style={styles.botonTexto}>+ Registrar Horas</Text>
+        </TouchableOpacity>
+      </Link>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
-  },
-  safeArea: {
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
-  },
-  heroSection: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
-  },
+  container: { flex: 1, backgroundColor: "#f4f4f9", paddingHorizontal: 20 },
+  header: { marginBottom: 20, marginTop: 10 },
   title: {
-    textAlign: 'center',
+    fontSize: 28,
+    fontWeight: "bold",
+    color: "#1a1a1a",
+    marginBottom: 15,
   },
-  code: {
-    textTransform: 'uppercase',
+  cardResumen: {
+    backgroundColor: "#6200ee",
+    padding: 20,
+    borderRadius: 12,
+    alignItems: "center",
   },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
+  resumenTexto: { color: "#ffffff", fontSize: 16, opacity: 0.9 },
+  resumenHoras: {
+    color: "#ffffff",
+    fontSize: 32,
+    fontWeight: "bold",
+    marginTop: 5,
   },
+  subtitle: {
+    fontSize: 20,
+    fontWeight: "600",
+    marginBottom: 10,
+    color: "#333",
+  },
+  juegoCard: {
+    backgroundColor: "#fff",
+    padding: 15,
+    borderRadius: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 10,
+    elevation: 2,
+  },
+  juegoNombre: { fontSize: 16, fontWeight: "bold", color: "#222" },
+  juegoDetalle: { fontSize: 13, color: "#666", marginTop: 4 },
+  badgeHoras: {
+    backgroundColor: "#e8def8",
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 8,
+  },
+  badgeTexto: { color: "#6200ee", fontWeight: "600", fontSize: 13 },
+  botonAgregar: {
+    backgroundColor: "#03dac6",
+    padding: 15,
+    borderRadius: 10,
+    alignItems: "center",
+    marginVertical: 15,
+  },
+  botonTexto: { color: "#000", fontWeight: "bold", fontSize: 16 },
 });
