@@ -1,13 +1,13 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import {
-    Alert,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Alert,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -37,7 +37,10 @@ export default function ProfileSettingsScreen() {
         {
           text: "Confirmar",
           style: "destructive",
-          onPress: () => router.replace("/"),
+          onPress: () => {
+            // Desmonta las pestañas y redirige limpiamente a la pantalla de Login
+            router.replace("/login");
+          },
         },
       ],
       { cancelable: true },

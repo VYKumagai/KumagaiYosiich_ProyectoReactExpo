@@ -6,6 +6,7 @@ export default function RootLayout() {
     <>
       <StatusBar style="light" />
       <Stack
+        initialRouteName="login"
         screenOptions={{
           headerStyle: { backgroundColor: "#121214" },
           headerTintColor: "#ffffff",
@@ -13,14 +14,16 @@ export default function RootLayout() {
           contentStyle: { backgroundColor: "#121214" },
         }}
       >
-        {/* Pantalla de Login inicial */}
-        <Stack.Screen name="index" options={{ headerShown: false }} />
+        {/* Pantalla 1: Login de la aplicación */}
+        <Stack.Screen name="login" options={{ headerShown: false }} />
 
-        {/* Grupo de Pestañas con la interfaz de la Fase 2 */}
+        {/* Pantalla 2: Pestañas principales */}
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
 
-        {/* Pantallas independientes */}
+        {/* Pantalla 3: Recuperación de contraseña */}
         <Stack.Screen name="forgot-password" options={{ headerShown: false }} />
+
+        {/* Pantalla 4: Modal para registrar horas */}
         <Stack.Screen
           name="modal"
           options={{ presentation: "modal", title: "Registrar Horas" }}

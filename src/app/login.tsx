@@ -1,25 +1,24 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import {
-    Alert,
-    StatusBar,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Alert,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function LoginScreen() {
   const router = useRouter();
-
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  // Manejo de inicio de sesión
   const handleLogin = () => {
     if (username.trim().toLowerCase() === "vampel" && password === "336699") {
+      setUsername("");
+      setPassword("");
       router.replace("/(tabs)");
     } else {
       Alert.alert("Error de Acceso", "Usuario o contraseña incorrectos.");
@@ -28,8 +27,6 @@ export default function LoginScreen() {
 
   return (
     <SafeAreaView style={styles.darkContainer}>
-      <StatusBar barStyle="light-content" />
-
       <View style={styles.headerLogin}>
         <Text style={styles.logoTitle}>Game Tracker 🎮</Text>
         <Text style={styles.logoSubtitle}>Ingresa a tu cuenta de jugador</Text>
@@ -104,7 +101,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     fontSize: 15,
   },
-  forgotButton: { alignSelf: "flex-end", paddingVertical: 8, marginBottom: 16 },
+  forgotButton: { alignSelf: "flex-end", marginBottom: 16 },
   forgotText: { color: "#0070dd", fontSize: 13, fontWeight: "600" },
   primaryButton: {
     backgroundColor: "#6200ee",

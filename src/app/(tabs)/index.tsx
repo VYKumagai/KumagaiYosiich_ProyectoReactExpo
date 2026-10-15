@@ -36,22 +36,19 @@ export default function UserProfileScreen() {
     },
   ]);
 
-  // VALIDACIÓN DE CIERRE DE SESIÓN CON ALERTDIALOG (Requisito Cesun)
+  // VALIDACIÓN DE CIERRE DE SESIÓN CON ALERTDIALOG
   const handleLogout = () => {
     Alert.alert(
       "Cerrar Sesión",
       "¿Estás seguro de que deseas salir de Game Tracker?",
       [
-        {
-          text: "Cancelar",
-          onPress: () => console.log("Cierre de sesión cancelado"),
-          style: "cancel",
-        },
+        { text: "Cancelar", style: "cancel" },
         {
           text: "Confirmar",
           style: "destructive",
           onPress: () => {
-            router.replace("/");
+            // Desmonta las pestañas y redirige limpiamente a la pantalla de Login
+            router.replace("/login");
           },
         },
       ],
@@ -76,7 +73,6 @@ export default function UserProfileScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        {/* Cabecera con Botón Visible de Cerrar Sesión */}
         <View style={styles.topBar}>
           <Text style={styles.topBarTitle}>Perfil de Jugador</Text>
           <TouchableOpacity
@@ -87,7 +83,6 @@ export default function UserProfileScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* Info del Usuario */}
         <View style={styles.header}>
           <View style={styles.avatarPlaceholder}>
             <Text style={styles.avatarText}>⚔️</Text>
